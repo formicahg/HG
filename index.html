@@ -8,19 +8,19 @@
   <style>
     html,body { height:100%; margin:0; padding:0; font-family:'Orbit','Noto Sans KR',sans-serif; background:#000; }
     body { min-height:100vh; min-width:100vw; overflow-x:hidden; }
-    /* --- 홈 전체 배경 영상 --- */
+    /* 배경영상 */
     #bgVideo {
       position:fixed; left:0; top:0; width:100vw; height:100vh;
-      object-fit:cover; z-index:-2; min-width:100vw; min-height:100vh;
-      background:#000;
-      filter:brightness(0.96) contrast(1.1) blur(0.5px);
+      min-width:100vw; min-height:100vh;
+      object-fit:cover; z-index:-2; background:#000;
+      filter:brightness(0.96) contrast(1.12) blur(0.4px);
       pointer-events:none;
     }
     body::after {
       content:''; position:fixed; left:0; top:0; width:100vw; height:100vh; z-index:-1;
-      background:rgba(0,0,0,0.38); pointer-events:none;
+      background:rgba(0,0,0,0.34); pointer-events:none;
     }
-    /* --- 인트로 --- */
+    /* 인트로 */
     #introOverlay {
       position:fixed;z-index:2001;left:0;top:0;width:100vw;height:100vh;
       background:#000;display:flex;align-items:center;justify-content:center;
@@ -29,16 +29,19 @@
     @keyframes introIn {from{opacity:0;}to{opacity:1;}}
     #introVideo {width:100vw;height:100vh;object-fit:cover;background:#000;}
     #skipIntro {
-      position:absolute;right:7vw;bottom:7vh;z-index:2002;
-      background:rgba(30,0,0,.85);border:2px solid #ff2c2c;border-radius:18px;
-      color:#fffbec;font-weight:700;padding:12px 30px;font-size:1.09rem;letter-spacing:.09em;
+      position:absolute;right:5vw;bottom:7vh;z-index:2002;
+      background:rgba(30,0,0,.85);border:2px solid #ff2c2c;border-radius:15px;
+      color:#fffbec;font-weight:700;padding:7px 16px;font-size:0.92rem;letter-spacing:.09em;
       cursor:pointer;text-shadow:0 0 8px #ff2c2c99;box-shadow:0 0 16px #ff2c2c55;transition:.17s;
     }
-    #skipIntro:hover {filter:brightness(1.09) drop-shadow(0 0 9px #ff2c2c);color:#ffe800;}
-    /* --- 홈 UI는 인트로 끝나기 전엔 보이지 않게! --- */
+    #skipIntro:hover {filter:brightness(1.13) drop-shadow(0 0 6px #ff2c2c);color:#ffe800;}
+    /* 모바일에서 스킵버튼 더 작게 */
+    @media (max-width:700px) {
+      #skipIntro { font-size:0.81rem; padding:6px 12px; right:3vw; bottom:5vh; border-radius:11px;}
+    }
+    /* 홈 UI */
     .header-bar, .main-stack, .nav-bottom { opacity:0; visibility:hidden; transition:opacity .4s; }
     .show-home { opacity:1 !important; visibility:visible !important; transition:opacity .4s;}
-    /* --- 네온펑크 UI --- */
     .header-bar {
       position:fixed; left:0; top:0; width:100vw; height:60px; z-index:110;
       display:flex; align-items:center; justify-content:space-between;
@@ -61,7 +64,6 @@
       height:40px; min-width:40px;
       z-index:120;
     }
-    .bgm-float-btn:hover {background:#180000; color:#ffbb00; border-color:#ffe800;}
     .sns-menu-btn {
       width:44px; height:44px;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -227,58 +229,58 @@
       },500);
     }
     introVideo.onended = showHome;
-    skipIntro.onclick = showHome;
+        skipIntro.onclick = showHome;
 
-    // BGM 버튼
-    const bgmBtn = document.getElementById('bgmToggle');
-    const bgmAudio = document.getElementById('bgmAudio');
-    let bgmOn = false;
-    bgmBtn.onclick = function() {
-      if(bgmOn){
-        bgmAudio.pause();
-        bgmBtn.innerHTML = '<span id="bgmIcon">🔈</span>';
-        bgmOn = false;
-      }else{
-        bgmAudio.play();
-        bgmBtn.innerHTML = '<span id="bgmIcon">🔊</span>';
-        bgmOn = true;
-      }
-    };
-    // 모바일 자동재생 허용
-    document.body.addEventListener('click',function autoPlayBgm(){
-      if(bgmOn && bgmAudio.paused) bgmAudio.play();
-      document.body.removeEventListener('click',autoPlayBgm);
-    });
+        // BGM 버튼
+        const bgmBtn = document.getElementById('bgmToggle');
+        const bgmAudio = document.getElementById('bgmAudio');
+        let bgmOn = false;
+        bgmBtn.onclick = function() {
+          if(bgmOn){
+            bgmAudio.pause();
+            bgmBtn.innerHTML = '<span id="bgmIcon">🔈</span>';
+            bgmOn = false;
+          }else{
+            bgmAudio.play();
+            bgmBtn.innerHTML = '<span id="bgmIcon">🔊</span>';
+            bgmOn = true;
+          }
+        };
+        // 모바일 자동재생 허용
+        document.body.addEventListener('click',function autoPlayBgm(){
+          if(bgmOn && bgmAudio.paused) bgmAudio.play();
+          document.body.removeEventListener('click',autoPlayBgm);
+        });
 
-    // SNS 햄버거버튼 & 네온 모달
-    const snsBtn = document.getElementById('snsBtn');
-    const snsModal = document.getElementById('snsModal');
-    let snsOpen = false;
-    snsBtn.onclick = function(e) {
-      e.stopPropagation();
-      if(!snsOpen){
-        snsModal.style.display = 'flex';
-        snsModal.style.animation = 'modalIn .42s';
-        snsOpen = true;
-      }else{
-        snsModal.style.display = 'none';
-        snsOpen = false;
-      }
-    };
-    // 모달 바깥 클릭시 닫기 (모바일 터치 포함)
-    document.addEventListener('click', function(e){
-      if(snsOpen && !snsModal.contains(e.target) && e.target!==snsBtn){
-        snsModal.style.display = 'none';
-        snsOpen = false;
-      }
-    });
-    // ESC로도 닫기
-    document.addEventListener('keydown',function(e){
-      if(e.key==="Escape" && snsOpen){
-        snsModal.style.display = 'none';
-        snsOpen = false;
-      }
-    });
-  </script>
-</body>
-</html>
+        // SNS 햄버거버튼 & 네온 모달
+        const snsBtn = document.getElementById('snsBtn');
+        const snsModal = document.getElementById('snsModal');
+        let snsOpen = false;
+        snsBtn.onclick = function(e) {
+          e.stopPropagation();
+          if(!snsOpen){
+            snsModal.style.display = 'flex';
+            snsModal.style.animation = 'modalIn .42s';
+            snsOpen = true;
+          }else{
+            snsModal.style.display = 'none';
+            snsOpen = false;
+          }
+        };
+        // 모달 바깥 클릭시 닫기 (모바일 터치 포함)
+        document.addEventListener('click', function(e){
+          if(snsOpen && !snsModal.contains(e.target) && e.target!==snsBtn){
+            snsModal.style.display = 'none';
+            snsOpen = false;
+          }
+        });
+        // ESC로도 닫기
+        document.addEventListener('keydown',function(e){
+          if(e.key==="Escape" && snsOpen){
+            snsModal.style.display = 'none';
+            snsOpen = false;
+          }
+        });
+      </script>
+    </body>
+    </html>
