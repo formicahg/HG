@@ -8,7 +8,6 @@
   <style>
     html,body {margin:0;padding:0;height:100%;width:100vw;background:#000;overflow-x:hidden;}
     body {min-height:100vh;font-family:'Orbitron','Pretendard',Arial,sans-serif;}
-
     /* 인트로 */
     #intro {
       position:fixed;z-index:300;left:0;top:0;width:100vw;height:100vh;
@@ -57,7 +56,6 @@
       0%{opacity:0;transform:translateY(25px) scale(1.08);}
       100%{opacity:1;transform:none;}
     }
-
     /* 상단 버튼 */
     .bgm-btn {
       border:none; outline:none; background:rgba(0,0,0,0.36); border-radius:50%; width:38px; height:38px;
@@ -105,7 +103,6 @@
       padding-bottom:2px;text-align:left;
     }
     .burger-menu a:hover {color:#ff2c2c; text-shadow:0 0 13px #ff2c2c,0 0 7px #ffe800;}
-
     /* 메인 */
     #appBody {display:none;}
     .main {
@@ -174,7 +171,7 @@
   </style>
 </head>
 <body>
-  <!-- 인트로(항상 제일 위) -->
+  <!-- 인트로(항상 제일 위, 홈이 먼저 안보임) -->
   <div id="intro">
     <div class="intro-logo">
       <img src="https://github.com/formicahg/HG/raw/main/Logo%20.png" alt="로고">
@@ -269,29 +266,29 @@
       burgerBtn.classList.toggle('open');
       burgerMenu.style.display = (burgerMenu.style.display === 'flex') ? 'none' : 'flex';
     }
-    document.body.addEventListener('click',function(e){
-      if(!burgerBtn.contains(e.target) && !burgerMenu.contains(e.target)){
-        burgerBtn.classList.remove('open');
-        burgerMenu.style.display = 'none';
-      }
-    });
-    burgerMenu.addEventListener('click',function(e){
-      e.stopPropagation();
-    });
-    document.addEventListener('keydown',function(e){
-      if(e.key==="Escape"){
-        burgerBtn.classList.remove('open');
-        burgerMenu.style.display = 'none';
-      }
-    });
-    function adjustBurgerMenu() {
-      if (burgerMenu.style.display === 'flex') {
-        burgerMenu.style.maxHeight = (window.innerHeight - 100) + 'px';
-        burgerMenu.style.overflowY = 'auto';
-      }
-    }
-    window.addEventListener('resize', adjustBurgerMenu);
-    burgerBtn.addEventListener('click', adjustBurgerMenu);
-  </script>
-</body>
+                                   document.body.addEventListener('click',function(e){
+                                         if(!burgerBtn.contains(e.target) && !burgerMenu.contains(e.target)){
+                                           burgerBtn.classList.remove('open');
+                                           burgerMenu.style.display = 'none';
+                                         }
+                                       });
+                                       burgerMenu.addEventListener('click',function(e){
+                                         e.stopPropagation();
+                                       });
+                                       document.addEventListener('keydown',function(e){
+                                         if(e.key==="Escape"){
+                                           burgerBtn.classList.remove('open');
+                                           burgerMenu.style.display = 'none';
+                                         }
+                                       });
+                                       function adjustBurgerMenu() {
+                                         if (burgerMenu.style.display === 'flex') {
+                                           burgerMenu.style.maxHeight = (window.innerHeight - 100) + 'px';
+                                           burgerMenu.style.overflowY = 'auto';
+                                         }
+                                       }
+                                       window.addEventListener('resize', adjustBurgerMenu);
+                                       burgerBtn.addEventListener('click', adjustBurgerMenu);
+                                     </script>
+                                   </body>
 </html>
